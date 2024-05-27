@@ -1,5 +1,3 @@
-# app.py
-
 from dash import Dash, dcc, html
 import requests
 from tabs.location_tab import layout as location_layout
@@ -13,14 +11,21 @@ app = Dash(__name__)
 server = app.server
 
 def fetch_data():
-    url = 'https://flask-dataset.onrender.com'
+    url = 'http://127.0.0.1:7000/'
     response = requests.get(url)
     data = response.json()
     return data
 
 data = fetch_data()
 
+# Logo image URL
+olympics_logo_url = 'https://upload.wikimedia.org/wikipedia/commons/5/5c/Olympic_rings_without_rims.svg'
+
 app.layout = html.Div([
+    html.Div([
+        html.Img(src=olympics_logo_url, style={'width': '80px', 'height': '80px'}),
+        html.H1("FUNOLYMPIC GAMES 2024", style={'margin-left': '10px', 'font-size': '24px'})
+    ], style={'display': 'flex', 'align-items': 'center'}),
     dcc.Tabs([
         dcc.Tab(label='Viewership Distribution by Location', children=location_layout(app, data)),
         dcc.Tab(label='Viewership Distribution by Demographic', children=demographic_layout(app, data)),
@@ -33,3 +38,4 @@ app.layout = html.Div([
 
 if __name__ == '__main__':
     app.run_server(debug=True)
+
