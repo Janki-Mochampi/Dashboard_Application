@@ -12,27 +12,25 @@ def layout(app, data):
          Input('country-dropdown', 'value')]
     )
     def update_visualization_location(selected_sport, selected_country):
-        filtered_data = [record for record in data if (selected_country is None or record['Country'] == selected_country)]
+        # Filter data by selected country and sport
+        filtered_data = data
         
+        if selected_sport:
+            filtered_data = [record for record in filtered_data if record['Sport'] == selected_sport]
+        
+        if selected_country:
+            filtered_data = [record for record in filtered_data if record['Country'] == selected_country]
+
         # Choropleth map
         map_fig = px.choropleth(filtered_data, locations='Country', locationmode='country names', color='Viewership', hover_name='Country')
         map_fig.update_layout(title_text='Viewership Distribution by Country', title_x=0.5)
         map_fig.update_geos(showcountries=True)
         
         # Bar chart for viewership by continent
-        if selected_sport:
-            # Filter data by selected sport
-            sport_data = [record for record in filtered_data if record['Sport'] == selected_sport]
-            # Recalculate viewership by continent based on filtered data
-            continent_viewership = {continent: sum(record['Viewership'] for record in sport_data if record['Continent'] == continent) for continent in continents}
-            bar_fig = px.bar(x=list(continent_viewership.keys()), y=list(continent_viewership.values()))
-            bar_fig.update_layout(title_text='Viewership by Continent', title_x=0.5, xaxis_title='Continent', yaxis_title='Viewership')
-        else:
-            # Calculate viewership by continent for all data
-            continent_viewership = {continent: sum(record['Viewership'] for record in filtered_data if record['Continent'] == continent) for continent in continents}
-            bar_fig = px.bar(x=list(continent_viewership.keys()), y=list(continent_viewership.values()))
-            bar_fig.update_layout(title_text='Viewership by Continent', title_x=0.5, xaxis_title='Continent', yaxis_title='Viewership')
-        
+        continent_viewership = {continent: sum(record['Viewership'] for record in filtered_data if record['Continent'] == continent) for continent in continents}
+        bar_fig = px.bar(x=list(continent_viewership.keys()), y=list(continent_viewership.values()), labels={'x':'Continent', 'y':'Viewership'})
+        bar_fig.update_layout(title_text='Viewership by Continent', title_x=0.5, xaxis_title='Continent', yaxis_title='Viewership')
+
         return dcc.Graph(figure=map_fig), dcc.Graph(figure=bar_fig)
 
     return html.Div([
