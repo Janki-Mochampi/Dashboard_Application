@@ -11,7 +11,7 @@ app = Dash(__name__)
 server = app.server
 
 def fetch_data():
-    url = 'http://127.0.0.1:7000/'
+    url = 'https://flask-dataset.onrender.com'
     response = requests.get(url)
     data = response.json()
     return data
