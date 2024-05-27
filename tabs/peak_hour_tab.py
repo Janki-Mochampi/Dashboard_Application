@@ -39,11 +39,11 @@ def layout(app, data):
         filtered_data_continent = [record for record in data if (selected_continent is None or record['Continent'] == selected_continent)]
 
         # Histogram for viewership distribution over peak usage hours (for country)
-        hist_fig_country = px.bar(filtered_data_country, x='Peak Usage Hours', y='Viewership', title='Viewership Distribution over Peak Usage Hours (Country)')
+        hist_fig_country = px.bar(filtered_data_country, x='Peak Usage Hours', y='Viewership', title=f'Viewership Distribution over Peak Usage Hours in {selected_country}')
         hist_fig_country.update_layout(title_x=0.5, xaxis_title='Peak Usage Hours', yaxis_title='Viewership')
 
         # Histogram for viewership distribution over peak usage hours (for continent)
-        hist_fig_continent = px.bar(filtered_data_continent, x='Peak Usage Hours', y='Viewership', title='Viewership Distribution over Peak Usage Hours (Continent)')
+        hist_fig_continent = px.bar(filtered_data_continent, x='Peak Usage Hours', y='Viewership', title=f'Viewership Distribution over Peak Usage Hours in {selected_continent}')
         hist_fig_continent.update_layout(title_x=0.5, xaxis_title='Peak Usage Hours', yaxis_title='Viewership')
 
         return dcc.Graph(figure=hist_fig_country), dcc.Graph(figure=hist_fig_continent)
