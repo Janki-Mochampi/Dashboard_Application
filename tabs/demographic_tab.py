@@ -50,22 +50,22 @@ def layout(app, data):
             # Group ages and sum viewership
             age_group_counts_country = {age_group: sum(record['Viewership'] for record in filtered_data_country if age_group == record['Age']) for age_group in age_groups.values()}
             age_group_counts_sorted_country = {k: age_group_counts_country[k] for k in sorted(age_group_counts_country.keys())}
-            age_fig_country = px.bar(x=list(age_group_counts_sorted_country.keys()), y=list(age_group_counts_sorted_country.values()), title='Viewership Distribution by Age Group (Country)')
+            age_fig_country = px.bar(x=list(age_group_counts_sorted_country.keys()), y=list(age_group_counts_sorted_country.values()), title=f'Viewership Distribution by Age Group (Country) - {selected_country}')
             age_fig_country.update_layout(title_x=0.5, xaxis_title='Age Group', yaxis_title='Viewership')
             
             age_group_counts_continent = {age_group: sum(record['Viewership'] for record in filtered_data_continent if age_group == record['Age']) for age_group in age_groups.values()}
             age_group_counts_sorted_continent = {k: age_group_counts_continent[k] for k in sorted(age_group_counts_continent.keys())}
-            age_fig_continent = px.pie(names=list(age_group_counts_sorted_continent.keys()), values=list(age_group_counts_sorted_continent.values()), title='Viewership Distribution by Age Group (Continent)')
+            age_fig_continent = px.pie(names=list(age_group_counts_sorted_continent.keys()), values=list(age_group_counts_sorted_continent.values()), title=f'Viewership Distribution by Age Group (Continent) - {selected_continent}')
             
             return dcc.Graph(figure=age_fig_country), dcc.Graph(figure=age_fig_continent)
         elif selected_demographic == 'Gender':
             # Count gender distribution
             gender_counts_country = {gender: sum(record['Viewership'] for record in filtered_data_country if record['Gender'] == gender) for gender in ['Male', 'Female']}
-            gender_fig_country = px.bar(x=list(gender_counts_country.keys()), y=list(gender_counts_country.values()), title='Viewership Distribution by Gender (Country)')
+            gender_fig_country = px.bar(x=list(gender_counts_country.keys()), y=list(gender_counts_country.values()), title=f'Viewership Distribution by Gender (Country) - {selected_country}')
             gender_fig_country.update_layout(title_x=0.5, xaxis_title='Gender', yaxis_title='Viewership')
             
             gender_counts_continent = {gender: sum(record['Viewership'] for record in filtered_data_continent if record['Gender'] == gender) for gender in ['Male', 'Female']}
-            gender_fig_continent = px.pie(names=list(gender_counts_continent.keys()), values=list(gender_counts_continent.values()), title='Viewership Distribution by Gender (Continent)')
+            gender_fig_continent = px.pie(names=list(gender_counts_continent.keys()), values=list(gender_counts_continent.values()), title=f'Viewership Distribution by Gender (Continent) - {selected_continent}')
             
             return dcc.Graph(figure=gender_fig_country), dcc.Graph(figure=gender_fig_continent)
         else:
